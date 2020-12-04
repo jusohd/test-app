@@ -1,11 +1,16 @@
-<div class="container">
-    <infinite-scroll (scrolled)="onScroll()" style="height: 400px; overflow-y: auto">
-        <div *ngFor="let card of cards$ | async" class="col-12 col-md-3">
-            <app-card [card]="card"></app-card>
-        </div>
+<div class="row scroller" (scroll)="scrollHandler($event)">
+    <!-- 
+    <infinite-scroll class=" scroller" (scrolled)="onScroll($event)">
+        <infinite-scroll (scrolled)="onScroll()" style="height: 400px; overflow-y: auto"> -->
+    <div *ngFor="let card of cards$" class="col-12 col-md-3 mt-3">
+        <app-card [card]="card"></app-card>
+    </div>
+    <!-- </infinite-scroll> -->
+</div>
 
-        <div class="spinner-border text-dark" role="status" *ngIf="isLoading$ | async">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </infinite-scroll>
+<div class="alert alert-secondary text-center mx-auto w-50 loading" role="alert" *ngIf="isLoading$">
+    <strong>Loading...</strong>
+    <div class="spinner-border text-center ml-3" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
 </div>

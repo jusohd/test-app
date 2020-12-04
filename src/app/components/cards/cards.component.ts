@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Card } from "../../interfaces/card.interface";
+import { CardsService } from 'src/app/services/cards.service';
+import { Card } from '../../interfaces/card.interface';
+
 
 @Component({
   selector: 'app-cards',
@@ -8,22 +10,39 @@ import { Card } from "../../interfaces/card.interface";
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
-  tweets$: Observable<Card[]>;
-  isLoading$: Observable<boolean>;
+  cards: Card[] = [];
+  cards$: Card[];
+  isLoading$: boolean;
+  amountCards = 16;
 
-  constructor() { }
+  constructor(private _cards: CardsService) { }
 
   ngOnInit(): void {
+
+    this.cards = this._cards.gatAllCards();
+    this.isLoading$ = false;
+    this.cards$ = this.cards.slice(0, this.amountCards);
   }
 
   onScroll() {
-    this.getCards();
+    this.isLoading$ = true;
+    this._cards.getCards(this.cards, this.amountCards).then((response) => {
+      this.cards$ = response.cards;
+      this.amountCards = response.amount;
+      this.isLoading$ = false;
+    }).catch((error) => {
+    });
   }
 
-  private getCards() {
-    if (condition) {
-      
+  @HostListener('scroll', ['$event'])
+  scrollHandler(event) {
+    const scrollHeigh = event.srcElement.scrollHeight;
+    const heigh = event.srcElement.offsetHeight;
+    const scrollOffset = event.srcElement.scrollTop;
+
+    if (heigh === (scrollHeigh - scrollOffset)) {
+      this.onScroll();
     }
   }
-
 }
+
