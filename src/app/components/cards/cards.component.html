@@ -1,11 +1,18 @@
+<div class="col-12 my-1 d-md-flex">
+    <div class="form-group mb-0 col-12 col-md-6">
+        <input #idSearch type="number" placeholder="Filtrar por ID" class="form-control" id="idSearch"
+            (keyup)="filterCards()">
+    </div>
+    <div class="form-group mb-0 col-12 col-md-6">
+        <input #textSearch type="text" placeholder="Filtrar por texto" class="form-control" id="textSearch"
+            (keyup)="filterCards()">
+    </div>
+</div>
+
 <div class="row scroller" (scroll)="scrollHandler($event)">
-    <!-- 
-    <infinite-scroll class=" scroller" (scrolled)="onScroll($event)">
-        <infinite-scroll (scrolled)="onScroll()" style="height: 400px; overflow-y: auto"> -->
     <div *ngFor="let card of cards$" class="col-12 col-md-3 mt-3">
         <app-card [card]="card"></app-card>
     </div>
-    <!-- </infinite-scroll> -->
 </div>
 
 <div class="alert alert-secondary text-center mx-auto w-50 loading" role="alert" *ngIf="isLoading$">

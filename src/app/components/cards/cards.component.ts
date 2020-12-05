@@ -1,4 +1,5 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { logging } from 'protractor';
 import { Observable } from 'rxjs';
 import { CardsService } from 'src/app/services/cards.service';
 import { Card } from '../../interfaces/card.interface';
@@ -10,6 +11,8 @@ import { Card } from '../../interfaces/card.interface';
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
+  @ViewChild('idSearch') idSearch: ElementRef;
+  @ViewChild('textSearch') textSearch: ElementRef;
   cards: Card[] = [];
   cards$: Card[];
   isLoading$: boolean;
@@ -18,19 +21,62 @@ export class CardsComponent implements OnInit {
   constructor(private _cards: CardsService) { }
 
   ngOnInit(): void {
-
-    this.cards = this._cards.gatAllCards();
     this.isLoading$ = false;
-    this.cards$ = this.cards.slice(0, this.amountCards);
+    this._cards.getAllCards().then((response) => {
+      this.cards = response;
+      this.cards$ = this.cards.slice(0, this.amountCards);
+    });
+  }
+
+  getCards(callback) {
+    this._cards.getCards(this.cards, this.amountCards).then((response) => {
+      callback(response);
+    }).catch((error) => {
+    });
   }
 
   onScroll() {
     this.isLoading$ = true;
-    this._cards.getCards(this.cards, this.amountCards).then((response) => {
+    this.getCards((response) => {
       this.cards$ = response.cards;
       this.amountCards = response.amount;
       this.isLoading$ = false;
-    }).catch((error) => {
+    });
+  }
+
+
+  filteringCards(callback) {
+    if (this.idSearch.nativeElement.value === '' && this.textSearch.nativeElement.value === '') {
+      this.getCards((response) => {
+        this.cards$ = response.cards;
+        this.amountCards = response.amount;
+      });
+    } else {
+      const id = this.idSearch.nativeElement.value;
+      const text = this.textSearch.nativeElement.value;
+
+      this._cards.getAllCards().then(async (response) => {        
+        let cards;
+        if (id) {
+          cards = response.filter(card => card.id.includes(id));
+        }
+        if (text) {
+          cards = response.filter(card => card.text.includes(text));
+        }
+        callback(cards);
+      });
+    }
+  }
+
+  filterCards() {
+    this.isLoading$ = true;
+    this.filteringCards((response) => {
+      this.cards = response;
+      this.getCards((response) => {
+        this.cards$ = response.cards;
+        this.amountCards = response.amount;
+        this.isLoading$ = false;
+      });
     });
   }
 

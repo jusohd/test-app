@@ -1,6 +1,5 @@
 <div class="card" *ngIf="card">
-    <!-- <img [src]="card.photo" class="card-img-top"> -->
-    <img [src]="'/assets/img/'+card.photo" class="card-img-top">
+    <img [src]="card.photo" class="card-img-top">
     <div class="card-body">
         <p class="card-text">{{ card.text | slice:0:80}} </p>
     </div>
