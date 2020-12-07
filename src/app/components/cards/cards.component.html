@@ -1,19 +1,25 @@
 <div class="col-12 my-1 d-md-flex">
     <div class="form-group mb-0 col-12 col-md-6">
-        <input #idSearch type="number" placeholder="Filtrar por ID" class="form-control" id="idSearch"
-            (keyup)="filterCards()">
+        <input #idSearch="ngModel" [(ngModel)]="id" type="number" placeholder="Filtrar por ID" class="form-control"
+            id="idSearch">
     </div>
     <div class="form-group mb-0 col-12 col-md-6">
-        <input #textSearch type="text" placeholder="Filtrar por texto" class="form-control" id="textSearch"
-            (keyup)="filterCards()">
+        <input #textSearch="ngModel" [(ngModel)]="texto" type="text" placeholder="Filtrar por texto"
+            class="form-control" id="textSearch">
     </div>
 </div>
 
-<div class="row scroller" (scroll)="scrollHandler($event)">
+<div class="row scroller" (scroll)="scrollHandler($event)" *ngIf="cards$?.length; else noData">
     <div *ngFor="let card of cards$" class="col-12 col-md-3 mt-3">
         <app-card [card]="card"></app-card>
     </div>
 </div>
+
+<ng-template #noData>
+    <div class="col-12 my-5 text-center">
+        No hay elementos disponibles
+    </div>
+</ng-template>
 
 <div class="alert alert-secondary text-center mx-auto w-50 loading" role="alert" *ngIf="isLoading$">
     <strong>Loading...</strong>
