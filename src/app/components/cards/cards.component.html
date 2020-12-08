@@ -10,6 +10,19 @@
 </div>
 
 <div class="row scroller" (scroll)="scrollHandler($event)" *ngIf="cards$?.length; else noData">
+
+    <!-- <div class="col-12 col-md-3 mt-3">
+        <div class="card">
+            <img [src]="imgBien(cards[96].photo) ? cards[96].photo : './assets/img/noPhoto.png'" class="card-img-top">
+            <div class="card-body">
+                <p class="card-text mb-0">{{ cards[96].text | slice:0:80}} </p>
+                <div class="d-flex w-100">
+                    <span class="badge badge-dark ml-auto">{{ cards[96].id }}</span>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
     <div *ngFor="let card of cards$" class="col-12 col-md-3 mt-3">
         <app-card [card]="card"></app-card>
     </div>

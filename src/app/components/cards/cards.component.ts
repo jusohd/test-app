@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { CardsService } from 'src/app/services/cards.service';
 import { Card } from '../../interfaces/card.interface';
 import { NgModel } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -33,13 +33,13 @@ export class CardsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.idSearch.valueChanges.pipe(debounceTime(300)).subscribe(evt => {
+    this.idSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
       if (evt) {
         this.filterCards();
       }
     });
 
-    this.textSearch.valueChanges.pipe(debounceTime(300)).subscribe(evt => {
+    this.textSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
       if (evt) {
         this.filterCards();
       }

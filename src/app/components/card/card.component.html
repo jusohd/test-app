@@ -1,6 +1,9 @@
 <div class="card" *ngIf="card">
     <img [src]="card.photo" class="card-img-top">
     <div class="card-body">
-        <p class="card-text">{{ card.text | slice:0:80}} </p>
+        <p class="card-text mb-0">{{ card.text | slice:0:80}} </p>
+        <div class="d-flex w-100">
+            <span class="badge badge-dark ml-auto">{{ card.id }}</span>
+        </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Card } from '../interfaces/card.interface';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,10 @@ export class CardsService {
   Maecenas elementum a eros vehicula porttitor. Proin ac viverra velit, eu volutpat odio. Proin vel elementum tortor, ac porttitor libero. Donec aliquet finibus odio, in euismod nisi congue congue. 
   Quisque vitae nunc erat. Duis non arcu mauris. Praesent eget congue felis, at vestibulum justo. Proin rutrum scelerisque lectus, eu faucibus nunc condimentum vitae`;
   numberCards = 16;
+  statusPhoto: boolean;
+  observable: Observable<any>
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   async getAllCards() {
     const promise: any = await new Promise((resolve) => {
@@ -46,7 +49,6 @@ export class CardsService {
       const element: Card = {
         id: i.toString(),
         photo: `https://picsum.photos/id/${i}/500/500`,
-        // photo: 'stormtrooper.jpg',
         text: this.textRandom()
       };
 
@@ -64,7 +66,6 @@ export class CardsService {
 
     return text;
   }
-
 
   async getCards(cards: Card[], amountCards: number) {
     const promise: any = await new Promise((resolve, reject) => {
@@ -93,6 +94,7 @@ export class CardsService {
     });
 
     return promise;
-
   }
+
+
 }
