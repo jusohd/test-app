@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../interfaces/card.interface';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,19 +30,22 @@ export class CardsService {
   Quisque vitae nunc erat. Duis non arcu mauris. Praesent eget congue felis, at vestibulum justo. Proin rutrum scelerisque lectus, eu faucibus nunc condimentum vitae`;
   numberCards = 16;
   statusPhoto: boolean;
-  observable: Observable<any>
+  cards: Card[] = [];
+
+  private cardsSource = new Subject<Card[]>();
+  public cards$ = this.cardsSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
   async getAllCards() {
     const promise: any = await new Promise((resolve) => {
 
-      resolve(this.madeData());
+      resolve(this.makeData());
     })
     return promise;
   }
 
-  private madeData() {
+  private makeData() {
     const data: Card[] = [];
 
     for (let i = 1; i < 4000; i++) {
@@ -52,9 +55,8 @@ export class CardsService {
         text: this.textRandom()
       };
 
-      data.push(element);
+      this.cards.push(element);
     }
-    return data;
   }
 
   private textRandom() {
@@ -67,34 +69,10 @@ export class CardsService {
     return text;
   }
 
-  async getCards(cards: Card[], amountCards: number) {
-    const promise: any = await new Promise((resolve, reject) => {
-      if (!amountCards) {
-        const error = {
-          code: 0,
-          title: 'Error',
-          text: `Undefined card's amount`
-        };
-        reject(error);
-
-      } else {
-        const amount = amountCards + this.numberCards;
-
-        if (amount > cards.length) {
-          resolve(cards)
-        } else {
-          const data = {
-            cards: cards.slice(0, amount),
-            amount: amount
-          };
-          resolve(data);
-        }
-      }
-
+  getCards(): Observable<Card[]> {
+    return new Observable<Card[]>(observer => {
+      observer.next(this.cards);
     });
-
-    return promise;
   }
-
 
 }
