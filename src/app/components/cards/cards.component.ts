@@ -14,8 +14,8 @@ import { Card } from '../../interfaces/card.interface';
 export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('idSearch') idSearch: NgModel;
   @ViewChild('textSearch') textSearch: NgModel;
-  id: String;
-  texto: String;
+  id: string;
+  texto: string;
   cards: Card[] = [];
   isLoading$: boolean;
   public obsCards: Subscription;
@@ -31,19 +31,19 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.idSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
-      if (evt !== undefined) {
-        this.isLoading$ = true;
-        this.filterCards();
-      }
-    });
+    // this.idSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
+    //   if (evt !== undefined) {
+    //     this.isLoading$ = true;
+    //     this.filterCards();
+    //   }
+    // });
 
-    this.textSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
-      if (evt !== undefined) {
-        this.isLoading$ = true;
-        this.filterCards();
-      }
-    });
+    // this.textSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
+    //   if (evt !== undefined) {
+    //     this.isLoading$ = true;
+    //     this.filterCards();
+    //   }
+    // });
   }
 
   ngOnDestroy() {
@@ -58,8 +58,9 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   filterCards() {
-    const id = this.idSearch.value;
-    const text = this.textSearch.value;
+    this.isLoading$ = true;
+    const id = this.id;
+    const text = this.texto;
 
     this._cards.getCards().subscribe(data => {
       this.cards = data.filter((card: Card) => ((id ? card.id.includes(id) : true) && (text ? card.text.includes(text) : true)));

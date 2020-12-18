@@ -1,15 +1,15 @@
 <div class="col-12 my-1 d-md-flex">
     <div class="form-group mb-0 col-12 col-md-6">
         <input #idSearch="ngModel" [(ngModel)]="id" type="number" placeholder="Filtrar por ID" class="form-control"
-            id="idSearch">
+            id="idSearch" (keyup)="filterCards()">
     </div>
     <div class="form-group mb-0 col-12 col-md-6">
         <input #textSearch="ngModel" [(ngModel)]="texto" type="text" placeholder="Filtrar por texto"
-            class="form-control" id="textSearch">
+            class="form-control" id="textSearch" (keyup)="filterCards()">
     </div>
 </div>
 
-<cdk-virtual-scroll-viewport itemSize="50" class="row scroller" *ngIf="cards?.length; else noData">
+<cdk-virtual-scroll-viewport id="scroll" itemSize="50" class="row scroller" *ngIf="cards?.length; else noData">
     <div *cdkVirtualFor="let card of cards" class="cards-container col-12 col-md-3 mt-3">
         <app-card [card]="card"></app-card>
     </div>

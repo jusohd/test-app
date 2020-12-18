@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../interfaces/card.interface';
-import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -35,7 +34,7 @@ export class CardsService {
   private cardsSource = new Subject<Card[]>();
   public cards$ = this.cardsSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   async getAllCards() {
     const promise: any = await new Promise((resolve) => {
@@ -45,10 +44,16 @@ export class CardsService {
     return promise;
   }
 
+  getCards(): Observable<Card[]> {
+    return new Observable<Card[]>(observer => {
+      observer.next(this.cards);
+    });
+  }
+
   private makeData() {
     const data: Card[] = [];
 
-    for (let i = 1; i < 4000; i++) {
+    for (let i = 1; i < 4001; i++) {
       const element: Card = {
         id: i.toString(),
         photo: `https://picsum.photos/id/${i}/500/500`,
@@ -57,6 +62,7 @@ export class CardsService {
 
       this.cards.push(element);
     }
+
   }
 
   private textRandom() {
@@ -67,12 +73,6 @@ export class CardsService {
     const text = this.lorem.substring(start, (start + 80))
 
     return text;
-  }
-
-  getCards(): Observable<Card[]> {
-    return new Observable<Card[]>(observer => {
-      observer.next(this.cards);
-    });
   }
 
 }
