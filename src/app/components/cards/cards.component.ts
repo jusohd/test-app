@@ -17,54 +17,41 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   id: string;
   texto: string;
   cards: Card[] = [];
-  isLoading$: boolean;
-  public obsCards: Subscription;
+  isLoading: boolean;
+  obsCards$: Subscription;
 
-  constructor(private _cards: CardsService) {
+  constructor(private cardsService: CardsService) {
   }
 
   ngOnInit(): void {
-    this.isLoading$ = true;
-    this._cards.getAllCards().then(() => {
+    this.isLoading = true;
+    this.cardsService.getAllCards().then(() => {
       const crds = this.getCards();
     });
   }
 
   ngAfterViewInit(): void {
-    // this.idSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
-    //   if (evt !== undefined) {
-    //     this.isLoading$ = true;
-    //     this.filterCards();
-    //   }
-    // });
-
-    // this.textSearch.valueChanges.pipe(debounceTime(1000)).subscribe(evt => {
-    //   if (evt !== undefined) {
-    //     this.isLoading$ = true;
-    //     this.filterCards();
-    //   }
-    // });
   }
 
   ngOnDestroy() {
-    this.obsCards.unsubscribe();
+    this.obsCards$.unsubscribe();
   }
 
   getCards() {
-    this.obsCards = this._cards.getCards().subscribe(data => {
+    this.obsCards$ = this.cardsService.getCards().subscribe(data => {
       this.cards = data;
-      this.isLoading$ = false;
+      this.isLoading = false;
     });
   }
 
   filterCards() {
-    this.isLoading$ = true;
+    this.isLoading = true;
     const id = this.id;
     const text = this.texto;
 
-    this._cards.getCards().subscribe(data => {
+    this.cardsService.getCards().subscribe(data => {
       this.cards = data.filter((card: Card) => ((id ? card.id.includes(id) : true) && (text ? card.text.includes(text) : true)));
-      this.isLoading$ = false;
+      this.isLoading = false;
     });
   }
 

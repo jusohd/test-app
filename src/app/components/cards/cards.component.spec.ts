@@ -43,7 +43,7 @@ describe('CardsComponent', () => {
   it('should be an array containing 4000 elements and isLoading == false', () => {
     component.getCards();
     expect(component.cards.length).toBeGreaterThanOrEqual(4000);
-    expect(component.isLoading$).toBeFalse();
+    expect(component.isLoading).toBeFalse();
   });
 
   it('should be an array containing x elements matching id', () => {
