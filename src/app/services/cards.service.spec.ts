@@ -15,7 +15,7 @@ describe('CardsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-/*
+
   it('should return a object', ()=>{
     const res = service.getAllCards();
     expect(typeof res).toBe('object');
@@ -31,6 +31,6 @@ describe('CardsService', () => {
     const res = service.getCards();
     expect(typeof res).toBe('object');
   });
-*/
+
 
 });
