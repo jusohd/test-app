@@ -18,7 +18,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   texto: string;
   cards: Card[] = [];
   isLoading: boolean;
-  obsCards$: Subscription;
+  private _obsCards$: Subscription;
 
   constructor(private cardsService: CardsService) {
   }
@@ -26,7 +26,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.isLoading = true;
     this.cardsService.getAllCards().then(() => {
-      const crds = this.getCards();
+      this.getCards();
     });
   }
 
@@ -34,11 +34,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.obsCards$.unsubscribe();
+    this._obsCards$.unsubscribe();
   }
 
   getCards() {
-    this.obsCards$ = this.cardsService.getCards().subscribe(data => {
+    this._obsCards$ = this.cardsService.getCards().subscribe(data => {
       this.cards = data;
       this.isLoading = false;
     });
@@ -51,6 +51,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.cardsService.getCards().subscribe(data => {
       this.cards = data.filter((card: Card) => ((id ? card.id.includes(id) : true) && (text ? card.text.includes(text) : true)));
+      this.isLoading = false;
+    }, error => {
       this.isLoading = false;
     });
   }
